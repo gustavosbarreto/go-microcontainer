@@ -48,6 +48,11 @@ func Main(main func()) {
 			os.Exit(1)
 		}
 
+		if err := syscall.Mount("proc", "/proc", "proc", 0, ""); err != nil {
+			logrus.Error(errors.Wrapf(err, "mount proc failed"))
+			os.Exit(1)
+		}
+
 		main()
 	}
 }
