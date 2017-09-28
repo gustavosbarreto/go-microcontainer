@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"syscall"
 
+	"github.com/gustavosbarreto/go-microcontainer/rootfs/alpine"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -20,6 +21,11 @@ func CreateNetworkNamespace() {
 }
 
 func SetRootFSProvider(provider string) {
+	switch provider {
+	case "alpine":
+		rootfs = alpine.NewRootFS()
+		break
+	}
 }
 
 func Main(main func()) {
