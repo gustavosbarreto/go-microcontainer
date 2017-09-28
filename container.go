@@ -67,6 +67,11 @@ func Main(main func()) {
 			os.Exit(1)
 		}
 
+		if err := syscall.Mount("/dev", "rootfs/dev", "bind", syscall.MS_BIND, ""); err != nil {
+			logrus.Error(errors.Wrapf(err, "dev bind failed"))
+			os.Exit(1)
+		}
+
 		if err := syscall.PivotRoot("rootfs", "rootfs/tmp"); err != nil {
 			logrus.Error(errors.Wrapf(err, "pivot_root failed"))
 			os.Exit(1)
