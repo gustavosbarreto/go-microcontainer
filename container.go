@@ -9,6 +9,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var procAttr = &syscall.SysProcAttr{
+	Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC,
+}
+
+func CreateNetworkNamespace() {
+	procAttr.Cloneflags |= syscall.CLONE_NEWNET
+}
+
 func Main(main func()) {
 	if os.Getenv("CONTAINER_RUN") != "true" {
 		if err := pullRootfs(); err != nil {
@@ -23,9 +31,7 @@ func Main(main func()) {
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
 
-		cmd.SysProcAttr = &syscall.SysProcAttr{
-			Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC,
-		}
+		cmd.SysProcAttr = procAttr
 
 		if err := cmd.Run(); err != nil {
 			logrus.Error(errors.Wrapf(err, "failed to exec child process"))
