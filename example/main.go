@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	container.SetRootFSProvider("alpine")
 	container.Main(func() {
 		cmd := exec.Command("/bin/sh")
 
