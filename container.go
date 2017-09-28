@@ -6,6 +6,7 @@ import (
 	"syscall"
 
 	"github.com/gustavosbarreto/go-microcontainer/rootfs/alpine"
+	"github.com/gustavosbarreto/go-microcontainer/rootfs/scratch"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -25,6 +26,8 @@ func SetRootFSProvider(provider string) {
 	case "alpine":
 		rootfs = alpine.NewRootFS()
 		break
+	case "scratch":
+		rootfs = scratch.NewRootFS()
 	}
 }
 
