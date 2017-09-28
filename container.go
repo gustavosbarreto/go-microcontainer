@@ -9,6 +9,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var rootfs RootFSProvider
+
 var procAttr = &syscall.SysProcAttr{
 	Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC,
 }
@@ -17,9 +19,12 @@ func CreateNetworkNamespace() {
 	procAttr.Cloneflags |= syscall.CLONE_NEWNET
 }
 
+func SetRootFSProvider(provider string) {
+}
+
 func Main(main func()) {
 	if os.Getenv("CONTAINER_RUN") != "true" {
-		if err := pullRootfs(); err != nil {
+		if err := rootfs.PullRootFS(); err != nil {
 			logrus.Error(errors.Wrapf(err, "failed to pull rootfs"))
 			os.Exit(1)
 		}
