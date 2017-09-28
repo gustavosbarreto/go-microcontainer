@@ -17,6 +17,10 @@ var procAttr = &syscall.SysProcAttr{
 	Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC,
 }
 
+func init() {
+	rootfs = scratch.NewRootFS()
+}
+
 func CreateNetworkNamespace() {
 	procAttr.Cloneflags |= syscall.CLONE_NEWNET
 }
